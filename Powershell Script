@@ -1,0 +1,27 @@
+# Can be changed to any other license type, Business Essentials by default:
+# "reseller-account:O365_BUSINESS_ESSENTIALS"
+# "reseller-account:O365_BUSINESS_PREMIUM"
+# "Get-MsolAccountSku" to find other license names
+
+# Connect to O365 Powershell, specify User Principal Name to be licensed
+
+$ErrorActionPreference = 'silentlycontinue'
+Connect-MsolService
+$UPN = (Read-Host "Enter O365 username - Example: LastnameFirstinitial@domain.com")
+
+# Sets account location to United States
+
+Set-MsolUser -UserPrincipalName $UPN -UsageLocation US
+
+$User = Get-MsolUser -UserPrincipalName $UPN
+If ($User -eq $Null) 
+{
+Write-Host "User not found"
+}
+Else 
+{ 
+Set-MsolUserLicense -UserPrincipalName $UPN -AddLicenses "reseller-account:O365_BUSINESS_ESSENTIALS" | `
+Write-Host "Business Essentials license assigned to $UPN"
+}
+
+Start-Sleep -Seconds 5
